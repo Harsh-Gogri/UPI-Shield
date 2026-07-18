@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary: #261CC1;
+  --color-primaryHover: #1E169B;
+  --color-onPrimary: #FFFFFF;
+  --color-primaryContainer: #E9E8F9;
+  --color-onPrimaryContainer: #261CC1;
+  
+  --color-surface: #FBFBFB;
+  --color-onSurface: #1A1A1A;
+  --color-surfaceVariant: #F2F2F2;
+  --color-onSurfaceVariant: #666666;
+  
+  --color-card-blue: #E3F2FD;
+  --color-card-orange: #FFF3E0;
+  --color-card-lavender: #F3E5F5;
+  --color-card-mint: #E8F5E9;
+  --color-card-pink: #FCE4EC;
+  
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-onSurface antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.bento-card {
+  @apply rounded-[32px] shadow-soft border-none transition-all duration-300;
+}
+
+.bento-card:active {
+  @apply scale-[0.98] shadow-sm;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

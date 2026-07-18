@@ -1,0 +1,5 @@
+{
+  "name": "UPI Shield",
+  "description": "A mobile-first prototype to help users understand and prevent UPI scams through interactive demos and QR scanning.",
+  "requestFramePermissions": ["camera"]
+}
