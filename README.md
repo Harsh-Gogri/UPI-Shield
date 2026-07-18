@@ -1,7 +1,3 @@
-<div align="center">
-
-<img width="1200" alt="UPI Shield Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-
 # UPI Shield
 
 AI-powered UPI fraud detection and awareness platform built with React, TypeScript, Tailwind CSS, and Google Gemini.
