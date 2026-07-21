@@ -4,6 +4,7 @@ import { ShieldCheck } from "lucide-react";
 
 export const DesktopLanding = () => {
   const url = "https://tryupishield.vercel.app/";
+  const caseStudyUrl = "https://www.harshgogri.com/work/upi-shield";
 
   return (
     <div className="min-h-dvh bg-surface flex items-center justify-center p-8">
@@ -31,17 +32,17 @@ export const DesktopLanding = () => {
             <p className="text-lg text-onSurfaceVariant leading-relaxed mb-10 max-w-lg">
               UPI Shield is a mobile-first experience that helps identify
               suspicious UPI IDs, detect scam patterns, and educate users about
-              digital payment fraud before they make a transaction.
+              digital payment fraud.
             </p>
 
             <div className="flex items-center gap-4">
               <a
-                href={url}
+                href={caseStudyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
               >
-                Open in Browser →
+                View Case Study →
               </a>
 
               <p className="text-sm text-onSurfaceVariant">
@@ -77,9 +78,7 @@ export const DesktopLanding = () => {
                   </p>
 
                   <p className="text-sm text-center text-gray-500 mt-2 leading-relaxed">
-                    Point your phone's camera at the QR code to launch
-                    <br />
-                    UPI Shield instantly.
+                    Point your phone's camera at the QR code to launch UPI Shield.
                   </p>
                 </div>
               </div>
