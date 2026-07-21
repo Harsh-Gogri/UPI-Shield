@@ -1,4 +1,9 @@
-import { Type } from "@google/genai";
+enum Type {
+  OBJECT = "OBJECT",
+  STRING = "STRING",
+  ARRAY = "ARRAY",
+  NUMBER = "NUMBER",
+}
 
 export const scamGuideSchema = {
   type: Type.OBJECT,

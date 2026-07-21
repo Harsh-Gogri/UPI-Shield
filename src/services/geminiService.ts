@@ -1,72 +1,20 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { SCAM_GUIDE_SYSTEM_PROMPT, RISK_ANALYSIS_SYSTEM_PROMPT, buildScamGuidePrompt, buildRiskAnalysisPrompt } from "../prompts/geminiPrompts";
-import { scamGuideSchema, riskAnalysisSchema } from "../schemas/geminiSchemas";
 import type { ScamGuide, RiskAnalysis } from "../types/gemini";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
-const TEXT_MODEL = "gemini-3.1-flash-lite";
-const IMAGE_MODEL = "gemini-3.1-flash-image";
-
-async function generateJson<T>(
-  prompt: string,
-  systemInstruction: string,
-  responseSchema: {
-    type: Type;
-    properties: Record<string, unknown>;
-    required?: string[];
-  },
-): Promise<T> {
-  let lastError: unknown;
-
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const response = await ai.models.generateContent({
-        model: TEXT_MODEL,
-        contents: prompt,
-        config: {
-          systemInstruction,
-          responseMimeType: "application/json",
-          responseSchema,
-          temperature: 0.2,
-          topP: 0.9,
-          maxOutputTokens: 1024,
-        },
-      });
-
-      const text = response.text;
-
-      try {
-        return JSON.parse(text) as T;
-      } catch {
-        console.error("Failed to parse Gemini JSON:", text);
-        throw new Error("Gemini returned invalid JSON.");
-      }
-    } catch (error) {
-      lastError = error;
-
-      if (attempt === 1) {
-        await delay(1000);
-        continue;
-      }
-    }
-  }
-
-  throw lastError;
-}
-
-async function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 export async function getLatestScamInfo(query: string): Promise<ScamGuide> {
   try {
-    const data = await generateJson<ScamGuide>(buildScamGuidePrompt(query), SCAM_GUIDE_SYSTEM_PROMPT, scamGuideSchema);
+    const response = await fetch("/api/scamGuide", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+    });
 
-    return {
-      ...data,
-      sources: [],
-    };
+    if (!response.ok) {
+      throw new Error("Failed to fetch scam info");
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("Error fetching scam info:", error);
 
@@ -81,22 +29,22 @@ export async function getLatestScamInfo(query: string): Promise<ScamGuide> {
   }
 }
 
-export async function generateBannerImage(prompt: string) {
+export async function generateBannerImage(prompt: string): Promise<string | null> {
   try {
-    const response = await ai.models.generateContent({
-      model: IMAGE_MODEL,
-      contents: {
-        parts: [{ text: prompt }],
+    const response = await fetch("/api/bannerImage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({ prompt }),
     });
 
-    for (const part of response.candidates?.[0]?.content?.parts || []) {
-      if (part.inlineData) {
-        return `data:image/png;base64,${part.inlineData.data}`;
-      }
+    if (!response.ok) {
+      throw new Error("Failed to generate banner image");
     }
 
-    return null;
+    const data = await response.json();
+    return data.image || null;
   } catch (error) {
     console.error("Error generating banner image:", error);
     return null;
@@ -105,7 +53,19 @@ export async function generateBannerImage(prompt: string) {
 
 export async function analyzeRisk(input: string): Promise<RiskAnalysis> {
   try {
-    return await generateJson<RiskAnalysis>(buildRiskAnalysisPrompt(input), RISK_ANALYSIS_SYSTEM_PROMPT, riskAnalysisSchema);
+    const response = await fetch("/api/analyzeRisk", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ input }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to analyze risk");
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("Error analyzing risk:", error);
 
