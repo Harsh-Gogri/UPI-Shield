@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GoogleGenAI } from "@google/genai";
-import { RISK_ANALYSIS_SYSTEM_PROMPT, buildRiskAnalysisPrompt } from "../src/prompts/geminiPrompts";
-import { riskAnalysisSchema } from "../src/schemas/geminiSchemas";
-import type { RiskAnalysis } from "../src/types/gemini";
+import { RISK_ANALYSIS_SYSTEM_PROMPT, buildRiskAnalysisPrompt } from "./_lib/geminiPrompts";
+import { riskAnalysisSchema } from "./_lib/geminiSchemas";
+import type { RiskAnalysis } from "./_lib/types";
 
 const TEXT_MODEL = "gemini-3.1-flash-lite";
 

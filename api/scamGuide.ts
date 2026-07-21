@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GoogleGenAI } from "@google/genai";
-import { SCAM_GUIDE_SYSTEM_PROMPT, buildScamGuidePrompt } from "../src/prompts/geminiPrompts";
-import { scamGuideSchema } from "../src/schemas/geminiSchemas";
-import type { ScamGuide } from "../src/types/gemini";
+import { SCAM_GUIDE_SYSTEM_PROMPT, buildScamGuidePrompt } from "./_lib/geminiPrompts";
+import { scamGuideSchema } from "./_lib/geminiSchemas";
+import type { ScamGuide } from "./_lib/types";
 
 const TEXT_MODEL = "gemini-3.1-flash-lite";
 
