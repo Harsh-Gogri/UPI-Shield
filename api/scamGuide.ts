@@ -1,8 +1,112 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GoogleGenAI } from "@google/genai";
-import { SCAM_GUIDE_SYSTEM_PROMPT, buildScamGuidePrompt } from "./_lib/geminiPrompts";
-import { scamGuideSchema } from "./_lib/geminiSchemas";
-import type { ScamGuide } from "./_lib/types";
+
+interface ScamGuide {
+  title: string;
+  explanation: string;
+  howItWorks: string[];
+  warningSigns: string[];
+  whatToDo: string[];
+  sources?: string[];
+}
+
+const SCAM_GUIDE_SYSTEM_PROMPT = `
+You are an expert in UPI payments, digital fraud, and cybersecurity.
+
+Your job is to educate Indian users about UPI scams in a simple, accurate, and actionable way.
+
+Rules:
+- Return ONLY valid JSON matching the provided schema.
+- Never include markdown, code fences, or extra text.
+- Do not invent scams or security advice.
+- If the user's query is ambiguous, answer using the most common interpretation.
+- Explain concepts in language understandable by a non-technical user.
+- Avoid jargon whenever possible.
+- Keep explanations concise but informative.
+
+Content Guidelines:
+- title: Short and specific (maximum 8 words).
+- explanation: 2–4 sentences explaining the scam or security concept.
+- howItWorks: 4–6 chronological bullet points describing how the fraud happens.
+- warningSigns: 4–6 practical warning signs.
+- whatToDo: 5–7 actionable safety tips users can follow immediately.
+
+Prioritize guidance published by RBI, NPCI, banks, and established cybersecurity best practices.
+
+Do not exaggerate risks or create unnecessary fear.
+`;
+
+const buildScamGuidePrompt = (query: string) => `
+Application:
+This is a UPI fraud awareness application for Indian users.
+
+User Query:
+${query}
+
+Task:
+Educate the user about this UPI scam or security topic.
+
+Instructions:
+- Assume the user has no prior knowledge of UPI fraud.
+- If the query refers to a known UPI scam, explain that scam.
+- If the query refers to a UPI security concept, explain the concept.
+- If the query is ambiguous, answer using the most common interpretation.
+- Focus only on scams relevant to UPI payments and digital banking in India.
+- Explain using simple, practical language.
+- Do not invent facts.
+- Prioritize RBI, NPCI, and bank security guidance.
+
+Response Quality Requirements:
+- Provide enough detail that the user does not need another source.
+- Avoid repeating information across sections.
+- Make every bullet unique and actionable.
+- Use concrete examples where appropriate.
+
+Return JSON only.
+`;
+
+enum SchemaType {
+  OBJECT = "OBJECT",
+  STRING = "STRING",
+  ARRAY = "ARRAY",
+  NUMBER = "NUMBER",
+}
+
+const scamGuideSchema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    title: {
+      type: SchemaType.STRING,
+      description: "A short, descriptive title for the scam or security topic. Maximum 8 words.",
+    },
+    explanation: {
+      type: SchemaType.STRING,
+      description: "A simple explanation of the scam in 2–4 sentences, written for non-technical users.",
+    },
+    howItWorks: {
+      type: SchemaType.ARRAY,
+      description: "A chronological list of 4–6 steps explaining exactly how scammers execute this fraud.",
+      items: {
+        type: SchemaType.STRING,
+      },
+    },
+    warningSigns: {
+      type: SchemaType.ARRAY,
+      description: "A list of 4–6 practical warning signs that indicate the user may be targeted by this scam.",
+      items: {
+        type: SchemaType.STRING,
+      },
+    },
+    whatToDo: {
+      type: SchemaType.ARRAY,
+      description: "A list of 5–7 actionable safety tips users should immediately follow to avoid or respond to this scam.",
+      items: {
+        type: SchemaType.STRING,
+      },
+    },
+  },
+  required: ["title", "explanation", "howItWorks", "warningSigns", "whatToDo"],
+};
 
 const TEXT_MODEL = "gemini-3.1-flash-lite";
 
