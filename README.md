@@ -8,11 +8,11 @@ AI-powered UPI fraud detection and awareness platform built with React, TypeScri
 
 ## Features
 
-- 🔍 **ScamRadar** – Analyze UPI IDs using local heuristics and AI-powered fraud detection.
-- 📷 **ScanQR** – Scan UPI QR codes and perform instant security analysis before payment.
-- 🤖 **AI Deep Scan** – Uses Google Gemini to explain suspicious indicators and provide actionable recommendations.
-- 📚 **Scam Guide** – Learn about common UPI scams with RBI/NPCI-aligned guidance.
-- ⚡ **Local + AI Analysis** – Immediate local checks followed by asynchronous AI verification for a fast user experience.
+- **ScamRadar** – Analyze UPI IDs using local heuristics and AI-powered fraud detection.
+- **ScanQR** – Scan UPI QR codes and perform instant security analysis before payment.
+- **AI Deep Scan** – Uses Google Gemini to explain suspicious indicators and provide actionable recommendations.
+- **Scam Guide** – Learn about common UPI scams with RBI/NPCI-aligned guidance.
+- **Local + AI Analysis** – Immediate local checks followed by asynchronous AI verification for a fast user experience.
 
 ---
 
@@ -38,8 +38,8 @@ AI-powered UPI fraud detection and awareness platform built with React, TypeScri
 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone <https://github.com/Harsh-Gogri/UPI-Shield>
+cd <UPI-Shield>
 ```
 
 2. Install dependencies
